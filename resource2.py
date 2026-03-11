@@ -1,90 +1,129 @@
 import streamlit as st
 import pandas as pd
 
-st.set_page_config(page_title="2026 Analyst Reference", layout="wide")
+# 1. Page Configuration
+st.set_page_config(
+    page_title="Neal's Analyst Reference Guide",
+    page_icon="📊",
+    layout="wide"
+)
 
-# 1. Expanded Knowledge Base
+# 2. Enhanced Knowledge Base
 data = {
     "Tool": [
-        "SQL", "SQL", "SQL", "SQL", 
-        "Python", "Python", "Python", "Python",
-        "PowerBI", "PowerBI", "PowerBI",
-        "Excel", "Excel", "Excel"
+        "SQL", "SQL", "SQL", "SQL", "SQL", "SQL",
+        "Python", "Python", "Python", "Python", "Python", "Python",
+        "PowerBI", "PowerBI", "PowerBI", "PowerBI",
+        "Excel", "Excel", "Excel", "Excel"
     ],
     "Category": [
-        "Window Functions", "Cleaning", "Logic", "Aggregates",
-        "Pandas", "Pandas", "Pandas", "Time Series",
-        "DAX", "DAX", "Time Intelligence",
-        "Lookup", "Arrays", "Cleaning"
+        "Window Functions", "Cleaning", "Logic", "Aggregates", "Joins", "Subqueries",
+        "Pandas", "Pandas", "Visualization", "Visualization", "Cleaning", "Time Series",
+        "DAX", "DAX", "Time Intelligence", "Filtering",
+        "Lookup", "Arrays", "Cleaning", "Logic"
     ],
     "Function": [
-        "RANK() / ROW_NUMBER()", "TRIM / REPLACE", "COALESCE", "HAVING",
-        "df.groupby().agg()", "df.merge()", "df.pivot_table()", "pd.to_datetime()",
-        "CALCULATE", "DIVIDE", "SAMEPERIODLASTYEAR",
-        "XLOOKUP", "UNIQUE / FILTER", "TEXTBEFORE / TEXTAFTER"
+        "RANK()", "COALESCE", "CASE WHEN", "HAVING", "LEFT JOIN", "CTE (WITH)",
+        "df.merge()", "df.groupby()", "sns.barplot()", "plt.title()", "df.dropna()", "pd.to_datetime()",
+        "CALCULATE", "DIVIDE", "DATESYTD", "ALLSELECTED",
+        "XLOOKUP", "FILTER", "TEXTSPLIT", "LAMBDA"
     ],
     "Snippet": [
-        "RANK() OVER (PARTITION BY category ORDER BY sales DESC)",
-        "SELECT TRIM(REPLACE(column, 'Old', 'New'))",
-        "SELECT COALESCE(bonus, 0) + salary",
-        "GROUP BY 1 HAVING SUM(sales) > 1000",
-        "df.groupby('cat')['val'].agg(['sum', 'mean'])",
+        "SELECT name, RANK() OVER (ORDER BY score DESC) as rank FROM table",
+        "SELECT COALESCE(column, 0) -- Replaces NULL with 0",
+        "CASE WHEN sales > 100 THEN 'High' ELSE 'Low' END",
+        "GROUP BY category HAVING COUNT(*) > 5",
+        "SELECT a.*, b.* FROM table_a a LEFT JOIN table_b b ON a.id = b.id",
+        "WITH temp_table AS (SELECT * FROM original) SELECT * FROM temp_table",
         "pd.merge(df1, df2, on='id', how='left')",
-        "df.pivot_table(index='date', columns='cat', values='rev')",
+        "df.groupby('category').agg({'sales': ['sum', 'mean']})",
+        "sns.barplot(x='x_col', y='y_col', data=df)",
+        "plt.title('My Chart Title')\nplt.xlabel('X Axis')",
+        "df.dropna(subset=['important_column'])",
         "df['date'] = pd.to_datetime(df['date'])",
-        "CALCULATE([Total Sales], ALL(Products))",
-        "DIVIDE([Profit], [Revenue], 0)",
-        "CALCULATE([Sales], SAMEPERIODLASTYEAR('Calendar'[Date]))",
-        "=XLOOKUP(A2, Range1, Range2, 'Not Found')",
-        "=UNIQUE(FILTER(A2:B10, B2:B10 > 100))",
-        "=TEXTBEFORE(A2, '@')"
+        "CALCULATE([Total Sales], 'Product'[Color] = \"Red\")",
+        "DIVIDE([Numerator], [Denominator], 0)",
+        "CALCULATE([Total Sales], DATESYTD('Date'[Date]))",
+        "CALCULATE([Sales], ALLSELECTED('Table'))",
+        "=XLOOKUP(A2, Range_A, Range_B, \"Not Found\")",
+        "=FILTER(A2:B10, B2:B10 > 100)",
+        "=TEXTSPLIT(A2, \"@\")",
+        "=MAP(A2:A10, LAMBDA(x, x*1.1))"
     ],
     "Notes": [
-        "Essential for top-N analysis (e.g., Top 5 scores per team).",
-        "Removes hidden spaces that break JOINS.",
-        "Prevents math errors when dealing with NULLs.",
-        "Filters aggregated data (unlike WHERE which filters rows).",
-        "The 'Pivot Table' of Python.",
-        "The Python version of a SQL JOIN.",
-        "Reshapes data for easier visualization.",
-        "Essential for trend analysis and time-based filtering.",
-        "The most powerful DAX function—overrides filter context.",
-        "Safe division that avoids #DIV/0! errors.",
-        "Standard YoY (Year-over-Year) comparison tool.",
-        "The modern, more flexible replacement for VLOOKUP.",
-        "Dynamic arrays that automatically update.",
-        "Cleans messy strings without complex formulas."
+        "Essential for 'Top N' reports (e.g., Top 3 players per team).",
+        "Prevents math errors. Always wrap bonuses/discounts in this.",
+        "The standard way to create categories/buckets in SQL.",
+        "Filters data *after* it has been grouped.",
+        "Keeps all records from the left table, even if no match on right.",
+        "Common Table Expressions make complex queries readable.",
+        "The primary way to combine datasets in Python.",
+        "The 'Pivot Table' equivalent for data manipulation.",
+        "Clean, professional categorical charts.",
+        "Never forget to label your axes in a professional report!",
+        "Removes rows with missing values to clean your data.",
+        "Critical for any project involving dates (like Expense Trackers).",
+        "The most important DAX function. Overrides filter context.",
+        "Prevents #DIV/0 errors automatically.",
+        "Calculates Year-to-Date totals effortlessly.",
+        "Calculates totals based on what the user has currently filtered.",
+        "The most powerful lookup tool in modern Excel.",
+        "Returns a dynamic array of data matching criteria.",
+        "Newer function to easily split strings (like emails).",
+        "Advanced Excel for creating custom, reusable logic."
     ]
 }
 
 df_ref = pd.DataFrame(data)
 
-# 2. Sidebar Navigation
-st.sidebar.header("Navigation")
-view = st.sidebar.radio("Go to:", ["Cheat Sheet", "Visual Practice"])
+# 3. Sidebar
+st.sidebar.title("🛠️ Tools & Navigation")
+view = st.sidebar.radio("Go to:", ["Cheat Sheet", "Visual Practice", "About the Dev"])
 tool_filter = st.sidebar.multiselect("Select Tools", options=df_ref["Tool"].unique(), default=df_ref["Tool"].unique())
 
-# 3. Main UI
+# 4. Main App Views
 if view == "Cheat Sheet":
     st.title("📚 Analyst Knowledge Repository")
-    search = st.text_input("Search functions or keywords...")
+    st.write("A central hub for SQL, Python, Excel, and Power BI syntax.")
     
-    # Filtering logic
+    search = st.text_input("Search functions or keywords (e.g., 'null' or 'join')...")
+    
     filtered = df_ref[df_ref["Tool"].isin(tool_filter)]
     if search:
         filtered = filtered[filtered.apply(lambda row: search.lower() in row.astype(str).str.lower().to_string(), axis=1)]
 
     for _, row in filtered.iterrows():
-        with st.expander(f"{row['Tool']} | {row['Function']}"):
-            st.code(row['Snippet'])
+        with st.expander(f"{row['Tool']} | {row['Function']} ({row['Category']})"):
+            st.code(row['Snippet'], language='python' if row['Tool'] in ['Python', 'PowerBI'] else 'sql')
             st.info(row['Notes'])
 
 elif view == "Visual Practice":
-    st.title("🎯 Quick Drill")
-    st.write("Can you guess the tool/function based on the note?")
-    random_row = df_ref.sample(1).iloc[0]
-    st.subheader(f"Scenario: {random_row['Notes']}")
+    st.title("🎯 Interview Drill Mode")
+    st.write("Test your knowledge. Read the scenario and guess the code!")
     
-    if st.button("Reveal Answer"):
-        st.success(f"Tool: {random_row['Tool']} | Function: {random_row['Function']}")
-        st.code(random_row['Snippet'])
+    if st.button("Get Random Scenario"):
+        random_row = df_ref.sample(1).iloc[0]
+        st.session_state.current_ask = random_row
+        
+    if 'current_ask' in st.session_state:
+        st.subheader(f"How would you: {st.session_state.current_ask['Notes']}")
+        if st.button("Reveal Answer"):
+            st.success(f"Tool: {st.session_state.current_ask['Tool']} | Function: {st.session_state.current_ask['Function']}")
+            st.code(st.session_state.current_ask['Snippet'])
+
+elif view == "About the Dev":
+    st.title("👨‍💻 About Neal Kauffman")
+    st.markdown("""
+    **Current Focus:** Pursuing Data Analytics & Computer Systems (Collin College).  
+    **Certifications:** Google Data Analytics Professional Certificate (In Progress).  
+    **Specialties:** * Data Cleaning & SQL Optimization
+    * Python (Pandas, Streamlit, Matplotlib)
+    * Business Intelligence (Power BI & Excel)
+    
+    ---
+    ### 🚀 Featured Projects
+    * **Smart Expense Tracker:** A Streamlit dashboard for personal finance.
+    * **Python Scoreboard App:** Real-time game tracking with custom UI.
+    * **IMDb Data Warehouse:** SQL-based storage and querying for film data.
+    """)
+    st.sidebar.success("Deployment Successful!")
