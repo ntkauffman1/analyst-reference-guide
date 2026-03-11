@@ -8,29 +8,33 @@ st.set_page_config(
     layout="wide"
 )
 
-# 2. Enhanced Knowledge Base
+# 2. Comprehensive Knowledge Base
 data = {
     "Tool": [
         "SQL", "SQL", "SQL", "SQL", "SQL", "SQL",
         "Python", "Python", "Python", "Python", "Python", "Python",
-        "PowerBI", "PowerBI", "PowerBI", "PowerBI",
-        "Excel", "Excel", "Excel", "Excel"
+        "Power BI", "Power BI", "Power BI", "Power BI",
+        "Tableau", "Tableau", "Tableau",
+        "Excel", "Excel", "Excel", "Excel", "Excel", "Excel", "Excel", "Excel", "Excel", "Excel", "Excel", "Excel", "Excel"
     ],
     "Category": [
         "Window Functions", "Cleaning", "Logic", "Aggregates", "Joins", "Subqueries",
         "Pandas", "Pandas", "Visualization", "Visualization", "Cleaning", "Time Series",
         "DAX", "DAX", "Time Intelligence", "Filtering",
-        "Lookup", "Arrays", "Cleaning", "Logic"
+        "LOD Expressions", "Calculations", "Formatting",
+        "Math & Stats", "Math & Stats", "Math & Stats", "Text", "Text", "Text", "Logic", "Logic", "Lookup", "Lookup", "Lookup", "Date", "Criteria"
     ],
     "Function": [
         "RANK()", "COALESCE", "CASE WHEN", "HAVING", "LEFT JOIN", "CTE (WITH)",
         "df.merge()", "df.groupby()", "sns.barplot()", "plt.title()", "df.dropna()", "pd.to_datetime()",
         "CALCULATE", "DIVIDE", "DATESYTD", "ALLSELECTED",
-        "XLOOKUP", "FILTER", "TEXTSPLIT", "LAMBDA"
+        "FIXED LOD", "ZN()", "ATTR()",
+        "SUM / AVERAGE", "MIN / MAX", "COUNT / POWER", "CONCAT / TEXTJOIN", "TRIM", "LEFT / RIGHT / MID", 
+        "IF / AND / OR", "UPPER / PROPER", "VLOOKUP", "HLOOKUP", "INDEX + MATCH", "TODAY / DATEDIF", "SUMIFS / COUNTIFS"
     ],
     "Snippet": [
         "SELECT name, RANK() OVER (ORDER BY score DESC) as rank FROM table",
-        "SELECT COALESCE(column, 0) -- Replaces NULL with 0",
+        "SELECT COALESCE(column, 0)",
         "CASE WHEN sales > 100 THEN 'High' ELSE 'Low' END",
         "GROUP BY category HAVING COUNT(*) > 5",
         "SELECT a.*, b.* FROM table_a a LEFT JOIN table_b b ON a.id = b.id",
@@ -38,92 +42,137 @@ data = {
         "pd.merge(df1, df2, on='id', how='left')",
         "df.groupby('category').agg({'sales': ['sum', 'mean']})",
         "sns.barplot(x='x_col', y='y_col', data=df)",
-        "plt.title('My Chart Title')\nplt.xlabel('X Axis')",
+        "plt.title('My Chart Title')",
         "df.dropna(subset=['important_column'])",
         "df['date'] = pd.to_datetime(df['date'])",
         "CALCULATE([Total Sales], 'Product'[Color] = \"Red\")",
         "DIVIDE([Numerator], [Denominator], 0)",
         "CALCULATE([Total Sales], DATESYTD('Date'[Date]))",
         "CALCULATE([Sales], ALLSELECTED('Table'))",
-        "=XLOOKUP(A2, Range_A, Range_B, \"Not Found\")",
-        "=FILTER(A2:B10, B2:B10 > 100)",
-        "=TEXTSPLIT(A2, \"@\")",
-        "=MAP(A2:A10, LAMBDA(x, x*1.1))"
+        "{ FIXED [Region] : SUM([Sales]) }",
+        "ZN([Sales]) -- Returns 0 if NULL",
+        "ATTR([Category]) -- Checks if 1 value exists",
+        "=SUM(A2:A10) / =AVERAGE(A2:A10)",
+        "=MIN(A2:A10) / =MAX(A2:A10)",
+        "=COUNT(A2:A10) / =POWER(A2, 2)",
+        "=CONCAT(A2, \" \", B2) or =TEXTJOIN(\" \", TRUE, A2:B2)",
+        "=TRIM(A2)",
+        "=LEFT(A2, 3) / =RIGHT(A2, 2) / =MID(A2, 3, 4)",
+        "=IF(AND(A2>=70, B2=\"Complete\"), \"Pass\", \"Check\")",
+        "=UPPER(A2) / =PROPER(A2)",
+        "=VLOOKUP(A2, $D$2:$F$100, 3, FALSE)",
+        "=HLOOKUP(A2, $D$1:$H$10, 3, FALSE)",
+        "=INDEX(F:F, MATCH(A2, D:D, 0))",
+        "=TODAY() / =DATEDIF(A2, B2, \"d\")",
+        "=SUMIFS(B:B, A:A, \"North\", C:C, \">100\")"
     ],
     "Notes": [
-        "Essential for 'Top N' reports (e.g., Top 3 players per team).",
-        "Prevents math errors. Always wrap bonuses/discounts in this.",
-        "The standard way to create categories/buckets in SQL.",
-        "Filters data *after* it has been grouped.",
-        "Keeps all records from the left table, even if no match on right.",
-        "Common Table Expressions make complex queries readable.",
-        "The primary way to combine datasets in Python.",
-        "The 'Pivot Table' equivalent for data manipulation.",
-        "Clean, professional categorical charts.",
-        "Never forget to label your axes in a professional report!",
-        "Removes rows with missing values to clean your data.",
-        "Critical for any project involving dates (like Expense Trackers).",
-        "The most important DAX function. Overrides filter context.",
-        "Prevents #DIV/0 errors automatically.",
-        "Calculates Year-to-Date totals effortlessly.",
-        "Calculates totals based on what the user has currently filtered.",
-        "The most powerful lookup tool in modern Excel.",
-        "Returns a dynamic array of data matching criteria.",
-        "Newer function to easily split strings (like emails).",
-        "Advanced Excel for creating custom, reusable logic."
+        "Essential for ranking (e.g., Top scores per team).",
+        "Replaces NULL with a default value.",
+        "SQL's version of an IF statement.",
+        "Filters grouped data (must come after GROUP BY).",
+        "Returns all rows from left table, and matched from right.",
+        "Creates a temporary result set for cleaner code.",
+        "Combines dataframes (like a SQL JOIN).",
+        "Aggregates data by category.",
+        "Creates categorical bar charts.",
+        "Professional chart labeling.",
+        "Removes rows with missing data.",
+        "Converts strings to date objects for analysis.",
+        "The power-user function for DAX.",
+        "Safe division (prevents #DIV/0!).",
+        "Standard Year-to-Date calculation.",
+        "Considers only the currently active filters.",
+        "Level of Detail expression; ignores view dimensions.",
+        "Zero Null; prevents blank marks in charts.",
+        "Returns '*' if multiple values are in a single mark.",
+        "Basic arithmetic and mean calculation.",
+        "Finding range boundaries.",
+        "Numeric counting and exponents.",
+        "Merging text strings together.",
+        "Removes all extra spaces from text.",
+        "Extracting specific parts of a string.",
+        "Multi-condition logical testing.",
+        "Formatting text case for clean reports.",
+        "Vertical lookup by first column.",
+        "Horizontal lookup across the first row.",
+        "More flexible and powerful than VLOOKUP.",
+        "Dynamic dates and age/tenure calculations.",
+        "Sum or count only when specific criteria are met."
     ]
 }
 
 df_ref = pd.DataFrame(data)
 
-# 3. Sidebar
-st.sidebar.title("🛠️ Tools & Navigation")
-view = st.sidebar.radio("Go to:", ["Cheat Sheet", "Visual Practice", "About the Dev"])
-tool_filter = st.sidebar.multiselect("Select Tools", options=df_ref["Tool"].unique(), default=df_ref["Tool"].unique())
+# 3. Sidebar Navigation
+st.sidebar.title("📊 Analyst Hub")
+st.sidebar.markdown("[Go to Main Portfolio](https://data-analytics-portfolio-ntkauffman.streamlit.app/)")
+st.sidebar.divider()
 
-# 4. Main App Views
-if view == "Cheat Sheet":
-    st.title("📚 Analyst Knowledge Repository")
-    st.write("A central hub for SQL, Python, Excel, and Power BI syntax.")
-    
-    search = st.text_input("Search functions or keywords (e.g., 'null' or 'join')...")
-    
-    filtered = df_ref[df_ref["Tool"].isin(tool_filter)]
-    if search:
-        filtered = filtered[filtered.apply(lambda row: search.lower() in row.astype(str).str.lower().to_string(), axis=1)]
+main_nav = st.sidebar.radio("Navigation", ["Cheat Sheet", "Visual Practice", "About Neal"])
 
-    for _, row in filtered.iterrows():
-        with st.expander(f"{row['Tool']} | {row['Function']} ({row['Category']})"):
-            st.code(row['Snippet'], language='python' if row['Tool'] in ['Python', 'PowerBI'] else 'sql')
-            st.info(row['Notes'])
-
-elif view == "Visual Practice":
-    st.title("🎯 Interview Drill Mode")
-    st.write("Test your knowledge. Read the scenario and guess the code!")
+# 4. App Views
+if main_nav == "Cheat Sheet":
+    st.title("📚 Knowledge Repository")
+    st.write("Browse common functions organized by tool.")
     
-    if st.button("Get Random Scenario"):
-        random_row = df_ref.sample(1).iloc[0]
-        st.session_state.current_ask = random_row
+    # Nested Tabs for Tools
+    tab_sql, tab_py, tab_ex, tab_pbi, tab_tab = st.tabs(["SQL", "Python", "Excel", "Power BI", "Tableau"])
+    
+    search = st.text_input("Search across all categories (e.g., 'null' or 'lookup')...")
+
+    def display_filtered_content(tool_name):
+        filtered = df_ref[df_ref["Tool"] == tool_name]
+        if search:
+            filtered = filtered[filtered.apply(lambda row: row.astype(str).str.contains(search, case=False).any(), axis=1)]
         
-    if 'current_ask' in st.session_state:
-        st.subheader(f"How would you: {st.session_state.current_ask['Notes']}")
-        if st.button("Reveal Answer"):
-            st.success(f"Tool: {st.session_state.current_ask['Tool']} | Function: {st.session_state.current_ask['Function']}")
-            st.code(st.session_state.current_ask['Snippet'])
+        if filtered.empty:
+            st.write("No matching functions found in this tab.")
+        for _, row in filtered.iterrows():
+            with st.expander(f"{row['Function']} ({row['Category']})"):
+                st.code(row['Snippet'], language='python' if tool_name in ['Python', 'Power BI'] else 'sql')
+                st.write(f"**Insight:** {row['Notes']}")
 
-elif view == "About the Dev":
-    st.title("👨‍💻 About Neal Kauffman")
-    st.markdown("""
-    **Current Focus:** Pursuing Data Analytics & Computer Systems (Collin College).  
-    **Certifications:** Google Data Analytics Professional Certificate (In Progress).  
-    **Specialties:** * Data Cleaning & SQL Optimization
-    * Python (Pandas, Streamlit, Matplotlib)
-    * Business Intelligence (Power BI & Excel)
+    with tab_sql: display_filtered_content("SQL")
+    with tab_py: display_filtered_content("Python")
+    with tab_ex: display_filtered_content("Excel")
+    with tab_pbi: display_filtered_content("Power BI")
+    with tab_tab: display_filtered_content("Tableau")
+
+elif main_nav == "Visual Practice":
+    st.title("🎯 Technical Drill")
+    st.write("Test your memory! Select tools and guess the formula.")
     
-    ---
-    ### 🚀 Featured Projects
-    * **Smart Expense Tracker:** A Streamlit dashboard for personal finance.
-    * **Python Scoreboard App:** Real-time game tracking with custom UI.
-    * **IMDb Data Warehouse:** SQL-based storage and querying for film data.
-    """)
-    st.sidebar.success("Deployment Successful!")
+    # Filter moved here per request
+    tool_filter = st.sidebar.multiselect("Select Tools for Practice", options=df_ref["Tool"].unique(), default=df_ref["Tool"].unique())
+    
+    if st.button("New Challenge"):
+        practice_df = df_ref[df_ref["Tool"].isin(tool_filter)]
+        if not practice_df.empty:
+            st.session_state.challenge = practice_df.sample(1).iloc[0]
+        else:
+            st.warning("Please select at least one tool in the sidebar.")
+        
+    if 'challenge' in st.session_state:
+        st.info(f"**How would you:** {st.session_state.challenge['Notes']}")
+        if st.button("Show Answer"):
+            st.success(f"Tool: {st.session_state.challenge['Tool']} | Function: {st.session_state.challenge['Function']}")
+            st.code(st.session_state.challenge['Snippet'])
+
+elif main_nav == "About Neal":
+    st.title("👨‍💻 Neal Kauffman")
+    st.write("Online Data Researcher & Computer Systems Student")
+    
+    col1, col2 = st.columns(2)
+    with col1:
+        st.markdown("""
+        ### Core Competencies
+        * **Languages:** Python, SQL
+        * **Tools:** Power BI, Tableau, Excel
+        * **Education:** Collin College (Dean's List)
+        * **Cert:** Google Data Analytics
+        """)
+    with col2:
+        st.markdown("### Primary Portfolio")
+        st.info("Check out my full project gallery here:")
+        st.markdown("[Visit Portfolio Site](https://data-analytics-portfolio-ntkauffman.streamlit.app/)")
